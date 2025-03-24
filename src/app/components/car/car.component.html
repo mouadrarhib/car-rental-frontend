@@ -1,0 +1,107 @@
+<h2>Car Management</h2>
+
+<!-- Add New Car Form -->
+<div class="form-container mb-4">
+  <h3>Add New Car</h3>
+  <div class="form-group">
+    <label>Brand:</label>
+    <input type="text" class="form-control" [(ngModel)]="newCar.brand" name="brand" required>
+  </div>
+  <div class="form-group">
+    <label>Model:</label>
+    <input type="text" class="form-control" [(ngModel)]="newCar.model" name="model" required>
+  </div>
+  <div class="form-group">
+    <label>Price Per Day:</label>
+    <input type="number" class="form-control" [(ngModel)]="newCar.pricePerDay" name="pricePerDay" required>
+  </div>
+  <div class="form-group">
+    <label>Category:</label>
+    <select class="form-control" [(ngModel)]="newCar.categoryId" name="categoryId" required>
+      <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+    </select>
+  </div>
+  <div class="form-group form-check">
+    <input type="checkbox" class="form-check-input" [(ngModel)]="newCar.available" name="available">
+    <label class="form-check-label">Available</label>
+  </div>
+  <button (click)="createCar()" class="btn btn-primary">Add Car</button>
+</div>
+
+<!-- Car List -->
+<div *ngIf="cars.length === 0" class="loading-message">Loading cars...</div>
+
+<div *ngIf="cars.length > 0">
+  <div *ngFor="let car of cars" class="car-card">
+    <div class="car-header">
+      <h3>{{ car.brand }} - {{ car.model }}</h3>
+      <span class="availability-badge" [class.available]="car.available">
+        {{ getAvailabilityText(car.available) }}
+      </span>
+    </div>
+    
+    <div class="car-details">
+      <p><strong>Price per day:</strong> {{ car.pricePerDay | currency }}</p>
+      <p><strong>Category:</strong> {{ car.categoryName }}</p>
+    </div>
+
+    <!-- Your unchanged image display -->
+    <div *ngIf="car.imageUrl" class="car-image-container">
+      <img [src]="car.imageUrl" alt="{{ car.brand }} {{ car.model }}" class="car-image" />
+    </div>
+
+    <div class="car-actions">
+      <!-- Edit Button -->
+      <button (click)="setEditCar(car)" class="btn btn-edit">
+        <i class="edit-icon"></i> Edit
+      </button>
+      
+      <!-- Delete Button -->
+      <button (click)="deleteCar(car.id)" class="btn btn-delete">
+        <i class="delete-icon"></i> Delete
+      </button>
+      
+      <!-- File Upload (unchanged) -->
+      <div class="upload-wrapper">
+        <label for="file-upload-{{ car.id }}" class="btn btn-upload">
+          <i class="upload-icon"></i> Upload Image
+        </label>
+        <input
+          id="file-upload-{{ car.id }}"
+          type="file"
+          (change)="onFileSelected($event, car.id)"
+          style="display: none;"
+        />
+      </div>
+    </div>
+
+    <!-- Edit Form (shown when editing) -->
+    <div *ngIf="editCar?.id === car.id" class="edit-form">
+      <h4>Edit Car</h4>
+      <div class="form-group">
+        <label>Brand:</label>
+        <input type="text" class="form-control" [(ngModel)]="editCar!.brand">
+      </div>
+      <div class="form-group">
+        <label>Model:</label>
+        <input type="text" class="form-control" [(ngModel)]="editCar!.model">
+      </div>
+      <div class="form-group">
+        <label>Price:</label>
+        <input type="number" class="form-control" [(ngModel)]="editCar!.pricePerDay">
+      </div>
+      <div class="form-group">
+        <label>Category:</label>
+        <select class="form-control" [(ngModel)]="editCar!.categoryId">
+          <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+        </select>
+      </div>
+      <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="editCar!.available">
+        <label class="form-check-label">Available</label>
+      </div>
+      <button (click)="updateCar()" class="btn btn-save">Save Changes</button>
+      <button (click)="cancelEdit()" class="btn btn-cancel">Cancel</button>
+    </div>
+  </div>
+</div>

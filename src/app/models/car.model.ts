@@ -10,9 +10,10 @@ export interface CarRequest {
     id: number;
     brand: string;
     model: string;
+    categoryId: number;
     categoryName: string;
     pricePerDay: number;
     totalPrice: number;
-    imageUrl: string[]; // Array of image URLs
+    imageUrl: string | null; // Change to string (data URL) or null
     available: boolean;
   }
