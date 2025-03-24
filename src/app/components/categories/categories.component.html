@@ -1,0 +1,37 @@
+<h2>Categories</h2>
+
+<!-- Add Category Form -->
+<div class="mb-3">
+  <h3>Add New Category</h3>
+  <input [(ngModel)]="newCategory.name" placeholder="Category Name" class="form-control" />
+  <button (click)="createCategory()" class="btn btn-primary mt-2">Add Category</button>
+</div>
+
+<!-- Edit Category Form -->
+<div *ngIf="selectedCategory" class="mb-3">
+  <h3>Edit Category</h3>
+  <input [(ngModel)]="selectedCategory.name" placeholder="Category Name" class="form-control" />
+  <button (click)="updateCategory()" class="btn btn-success mt-2">Update Category</button>
+  <button (click)="selectedCategory = null" class="btn btn-secondary mt-2">Cancel</button>
+</div>
+
+<!-- Category List -->
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let category of categories">
+      <td>{{ category.id }}</td>
+      <td>{{ category.name }}</td>
+      <td>
+        <button (click)="editCategory(category)" class="btn btn-warning btn-sm">Edit</button>
+        <button (click)="deleteCategory(category.id)" class="btn btn-danger btn-sm">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
