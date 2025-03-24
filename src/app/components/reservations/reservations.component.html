@@ -1,0 +1,150 @@
+<!-- components/reservation/reservation.component.html -->
+<div class="reservation-container">
+    <div class="reservation-form">
+      <h2>{{ editMode ? 'Edit Reservation' : 'Create New Reservation' }}</h2>
+      
+      <form (ngSubmit)="onSubmit()" #reservationForm="ngForm">
+        <div class="form-grid">
+          <!-- Car Information -->
+          <div class="form-group">
+            <label for="carId">Car ID</label>
+            <input type="number" id="carId" 
+                   [(ngModel)]="currentReservation.carId" name="carId" required>
+          </div>
+          
+          <!-- Customer Information -->
+          <div class="form-group">
+            <label for="customerName">Customer Name</label>
+            <input type="text" id="customerName" 
+                   [(ngModel)]="currentReservation.customerName" name="customerName" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="departurePlace">Departure Place</label>
+            <input type="text" id="departurePlace" 
+                   [(ngModel)]="currentReservation.departurePlace" name="departurePlace" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="returnPlace">Return Place</label>
+            <input type="text" id="returnPlace" 
+                   [(ngModel)]="currentReservation.returnPlace" name="returnPlace" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="departureDate">Departure Date</label>
+            <input type="date" id="departureDate" 
+                   [(ngModel)]="currentReservation.departureDate" name="departureDate" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="returnDate">Return Date</label>
+            <input type="date" id="returnDate" 
+                   [(ngModel)]="currentReservation.returnDate" name="returnDate" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="customerEmail">Email</label>
+            <input type="email" id="customerEmail" 
+                   [(ngModel)]="currentReservation.customerEmail" name="customerEmail" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="customerPhone">Phone</label>
+            <input type="tel" id="customerPhone" 
+                   [(ngModel)]="currentReservation.customerPhone" name="customerPhone" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="customerAddress">Address</label>
+            <input type="text" id="customerAddress" 
+                   [(ngModel)]="currentReservation.customerAddress" name="customerAddress" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="customerCountry">Country</label>
+            <input type="text" id="customerCountry" 
+                   [(ngModel)]="currentReservation.customerCountry" name="customerCountry" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="promoCode">Promo Code (optional)</label>
+            <input type="text" id="promoCode" 
+                   [(ngModel)]="currentReservation.promoCode" name="promoCode">
+          </div>
+  
+          <div class="form-group">
+            <label for="comment">Comments (optional)</label>
+            <input type="text" id="comment" 
+                   [(ngModel)]="currentReservation.comment" name="comment">
+          </div>
+        </div>
+  
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="isLoading">
+            {{ isLoading ? 'Processing...' : (editMode ? 'Update' : 'Create') }}
+          </button>
+          <button type="button" class="btn-secondary" (click)="resetForm()" [disabled]="isLoading">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  
+    <div class="reservation-list">
+      <h2>Reservations List</h2>
+      
+      <div class="search-box">
+        <input type="text" placeholder="Search by customer, car..." 
+               [(ngModel)]="searchTerm" (input)="searchReservations()">
+      </div>
+  
+      <div class="loading-indicator" *ngIf="isLoading && !reservations.length">
+        Loading reservations...
+      </div>
+  
+      <div *ngIf="!isLoading && reservations.length === 0" class="no-results">
+        No reservations found
+      </div>
+  
+      <div class="table-container" *ngIf="reservations.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Customer</th>
+              <th>Car</th>
+              <th>Dates</th>
+              <th>Price</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let reservation of reservations">
+              <td>{{ reservation.id }}</td>
+              <td>
+                <strong>{{ reservation.customerName }}</strong><br>
+                <small>{{ reservation.customerEmail }}</small>
+              </td>
+              <td>{{ reservation.carName }}</td>
+              <td>
+                {{ reservation.departureDate | date:'shortDate' }} - 
+                {{ reservation.returnDate | date:'shortDate' }}
+              </td>
+              <td>${{ reservation.totalPrice | number:'1.2-2' }}</td>
+              <td>
+                <div class="action-buttons">
+                  <button class="btn-edit" (click)="editReservation(reservation)" [disabled]="isLoading">
+                    Edit
+                  </button>
+                  <button class="btn-delete" (click)="deleteReservation(reservation.id)" [disabled]="isLoading">
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
