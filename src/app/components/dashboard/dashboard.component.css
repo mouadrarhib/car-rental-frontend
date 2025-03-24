@@ -1,0 +1,37 @@
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .sidebar {
+    width: 250px;
+    background-color: #343a40;
+    color: white;
+    padding: 20px;
+  }
+  
+  .sidebar h2 {
+    color: white;
+    margin-bottom: 20px;
+  }
+  
+  .sidebar .nav-link {
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+  }
+  
+  .sidebar .nav-link.active {
+    background-color: #007bff;
+  }
+  
+  .sidebar .nav-link:hover {
+    background-color: #0056b3;
+  }
+  
+  .main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f8f9fa;
+  }
